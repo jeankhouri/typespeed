@@ -2,8 +2,6 @@
 
 [TypeSpeed](https://typespeed.edgesites.ca) is an interactive and engaging typing speed test tool, designed to help users improve their typing skills. The tool provides real-time feedback on typing speed (words per minute), accuracy, and other key metrics.
 
-![TypeSpeed Screenshot](https://typespeed.edgesites.ca/path-to-screenshot.png) 
-
 ## 🚀 Features
 
 - **Real-time Typing Feedback**: Displays real-time WPM, accuracy, and error count.
