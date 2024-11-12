@@ -1,0 +1,401 @@
+:root {
+    --grid-gap: 20px;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Roboto Mono;
+    line-height: 1.6rem;
+    background-color: #2e2e2e;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.title {
+    font-family: "Bai Jamjuree", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 40px;
+}
+
+.subtitle {
+    font-family: "Bai Jamjuree", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.bai-jamjuree-regular {
+    font-family: "Bai Jamjuree", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.bai-jamjuree-medium {
+    font-family: "Bai Jamjuree", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+
+
+.gridpattern {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: repeat;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 2000 1000%22 xmlns=%22http:%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cmask id=%22b%22 x=%220%22 y=%220%22 width=%222000%22 height=%221000%22%3E%3Cpath fill=%22url(%23a)%22 d=%22M0 0h2000v1000H0z%22%2F%3E%3C%2Fmask%3E%3Cpath fill=%22%232e2e2e%22 d=%22M0 0h2000v1000H0z%22%2F%3E%3Cg style=%22transform-origin:center center%22 stroke=%22%234b4b4b%22 stroke-width=%22.4%22 fill=%22none%22 mask=%22url(%23b)%22%3E%3Cpath d=%22M0 0h111v111H0zM111 0h111v111H111zM222 0h111v111H222zM333 0h111v111H333zM444 0h111v111H444zM555 0h111v111H555zM666 0h111v111H666zM777 0h111v111H777zM888 0h111v111H888zM999 0h111v111H999zM1110 0h111v111h-111zM1221 0h111v111h-111zM1332 0h111v111h-111zM1443 0h111v111h-111zM1554 0h111v111h-111zM1665 0h111v111h-111zM1776 0h111v111h-111zM1887 0h111v111h-111zM0 111h111v111H0zM111 111h111v111H111zM222 111h111v111H222zM333 111h111v111H333zM444 111h111v111H444zM555 111h111v111H555zM666 111h111v111H666zM777 111h111v111H777zM888 111h111v111H888zM999 111h111v111H999zM1110 111h111v111h-111zM1221 111h111v111h-111zM1332 111h111v111h-111zM1443 111h111v111h-111zM1554 111h111v111h-111zM1665 111h111v111h-111zM1776 111h111v111h-111zM1887 111h111v111h-111zM0 222h111v111H0zM111 222h111v111H111zM222 222h111v111H222zM333 222h111v111H333zM444 222h111v111H444zM555 222h111v111H555zM666 222h111v111H666zM777 222h111v111H777zM888 222h111v111H888zM999 222h111v111H999zM1110 222h111v111h-111zM1221 222h111v111h-111zM1332 222h111v111h-111zM1443 222h111v111h-111zM1554 222h111v111h-111zM1665 222h111v111h-111zM1776 222h111v111h-111zM1887 222h111v111h-111zM0 333h111v111H0zM111 333h111v111H111zM222 333h111v111H222zM333 333h111v111H333zM444 333h111v111H444zM555 333h111v111H555zM666 333h111v111H666zM777 333h111v111H777zM888 333h111v111H888zM999 333h111v111H999zM1110 333h111v111h-111zM1221 333h111v111h-111zM1332 333h111v111h-111zM1443 333h111v111h-111zM1554 333h111v111h-111zM1665 333h111v111h-111zM1776 333h111v111h-111zM1887 333h111v111h-111zM0 444h111v111H0zM111 444h111v111H111zM222 444h111v111H222zM333 444h111v111H333zM444 444h111v111H444zM555 444h111v111H555zM666 444h111v111H666zM777 444h111v111H777zM888 444h111v111H888zM999 444h111v111H999zM1110 444h111v111h-111zM1221 444h111v111h-111zM1332 444h111v111h-111zM1443 444h111v111h-111zM1554 444h111v111h-111zM1665 444h111v111h-111zM1776 444h111v111h-111zM1887 444h111v111h-111zM0 555h111v111H0zM111 555h111v111H111zM222 555h111v111H222zM333 555h111v111H333zM444 555h111v111H444zM555 555h111v111H555zM666 555h111v111H666zM777 555h111v111H777zM888 555h111v111H888zM999 555h111v111H999zM1110 555h111v111h-111zM1221 555h111v111h-111zM1332 555h111v111h-111zM1443 555h111v111h-111zM1554 555h111v111h-111zM1665 555h111v111h-111zM1776 555h111v111h-111zM1887 555h111v111h-111zM0 666h111v111H0zM111 666h111v111H111zM222 666h111v111H222zM333 666h111v111H333zM444 666h111v111H444zM555 666h111v111H555zM666 666h111v111H666zM777 666h111v111H777zM888 666h111v111H888zM999 666h111v111H999zM1110 666h111v111h-111zM1221 666h111v111h-111zM1332 666h111v111h-111zM1443 666h111v111h-111zM1554 666h111v111h-111zM1665 666h111v111h-111zM1776 666h111v111h-111zM1887 666h111v111h-111zM0 777h111v111H0zM111 777h111v111H111zM222 777h111v111H222zM333 777h111v111H333zM444 777h111v111H444zM555 777h111v111H555zM666 777h111v111H666zM777 777h111v111H777zM888 777h111v111H888zM999 777h111v111H999zM1110 777h111v111h-111zM1221 777h111v111h-111zM1332 777h111v111h-111zM1443 777h111v111h-111zM1554 777h111v111h-111zM1665 777h111v111h-111zM1776 777h111v111h-111zM1887 777h111v111h-111zM0 888h111v111H0zM111 888h111v111H111zM222 888h111v111H222zM333 888h111v111H333zM444 888h111v111H444zM555 888h111v111H555zM666 888h111v111H666zM777 888h111v111H777zM888 888h111v111H888zM999 888h111v111H999zM1110 888h111v111h-111zM1221 888h111v111h-111zM1332 888h111v111h-111zM1443 888h111v111h-111zM1554 888h111v111h-111zM1665 888h111v111h-111zM1776 888h111v111h-111zM1887 888h111v111h-111zM0 999h111v111H0zM111 999h111v111H111zM222 999h111v111H222zM333 999h111v111H333zM444 999h111v111H444zM555 999h111v111H555zM666 999h111v111H666zM777 999h111v111H777zM888 999h111v111H888zM999 999h111v111H999zM1110 999h111v111h-111zM1221 999h111v111h-111zM1332 999h111v111h-111zM1443 999h111v111h-111zM1554 999h111v111h-111zM1665 999h111v111h-111zM1776 999h111v111h-111zM1887 999h111v111h-111z%22%2F%3E%3C%2Fg%3E%3Cdefs%3E%3CradialGradient id=%22a%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff%22%2F%3E%3Cstop offset=%221%22 stop-color=%22%23fff%22 stop-opacity=%220%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3C%2Fsvg%3E");
+}
+
+#intro {
+    text-align: center;
+    text-wrap: balance;
+}
+
+
+#main {
+    margin: 0 0.4rem;
+    width: 95%;
+    max-width: 45rem;
+}
+
+.input-section {
+    background-color: #3f3f3f;
+    padding: 20px 0;
+    border-radius: 6px;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+div.leftbar>span {
+    background-color: #212121;
+    border-radius: 10px;
+    padding: 3px 10px;
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+
+div.leftbar>span:hover {
+    cursor: pointer;
+    background-color: #555555;
+}
+
+.top-bar {
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#input-field {
+    width: 100%;
+    border: none;
+    font: inherit;
+    padding: 0.4rem 10px 0.4rem 10px;
+    border-radius: 0.2rem;
+    font-size: 1.2rem;
+    background-color: #2e2e2e;
+    color: white;
+}
+
+
+.restart-btn,
+.new-round {
+    border: none;
+    font: inherit;
+    padding: 0.4rem 1rem;
+    border-radius: 0.2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: white;
+    transition: background-color 200ms ease-in-out;
+}
+
+.restart-btn:hover,
+.new-round:hover {
+    background-color: #272727;
+}
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s, transform .4s
+}
+
+
+.new-round {
+    width: 100%;
+}
+
+#dashboard {
+    display: none;
+}
+
+#stats {
+    display: none;
+}
+
+#dashboard>div.toolbar>div.leftbar>span.selected {
+    background-color: #fe4f02;
+    color: #fff;
+}
+
+#dashboard>div.input-section>div.top-bar.display-text>span {
+    margin-right: 8px;
+    transition: color 200ms ease-out;
+    border-bottom: solid 2px transparent !important;
+}
+
+.display-text {
+    transition: color 100ms ease-in-out;
+    color: rgb(119, 119, 119);
+}
+
+.highlight {
+    color: white;
+    border-bottom: solid 2px white !important;
+}
+
+.correct {
+    color: rgb(119, 119, 119);
+}
+
+.incorrect {
+    color: rgb(220, 96, 96);
+}
+
+.mistake {
+    background-color: rgb(105, 60, 60) !important;
+}
+
+.bottom-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: repeat(2, auto);
+    grid-column-gap: var(--grid-gap);
+    grid-row-gap: var(--grid-gap);
+    padding: 10px 20px 0 20px;
+    position: sticky;
+    bottom: 20px;
+    background-color: color(srgb 0.245 0.245 0.245 / 0.64);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.bottom-bar1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.bottom-bar2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.bottom-bar3 {
+    grid-area: 2 / 1 / 3 / 3;
+}
+
+#stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: var(--grid-gap);
+    grid-row-gap: var(--grid-gap);
+    margin-top: 20px;
+}
+
+.div1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.div2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.div3 {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.div4 {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.div5 {
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.div6 {
+    grid-area: 2 / 3 / 3 / 4;
+}
+
+.stat {
+    background-color: #3f3f3f;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-align: left;
+}
+
+.stat-value {
+    transition: color 100ms ease-in-out;
+    color: rgb(172, 172, 172);
+}
+
+.spark {
+    color: red !important;
+}
+
+.glow {
+    color: white !important;
+}
+
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgb(255, 255, 255);
+    /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    font-size: 12px;
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+
+@media (max-width: 767px) {}
+
+
+@media (max-width: 472px) {
+    #main {
+        width: 90%;
+    }
+
+    #stats {
+        font-size: 14px;
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-column-gap: var(--grid-gap);
+        grid-row-gap: var(--grid-gap);
+    }
+
+    .div1 {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .div2 {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .div3 {
+        grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .div4 {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+
+    .div5 {
+        grid-area: 3 / 1 / 4 / 2;
+    }
+
+    .div6 {
+        grid-area: 3 / 2 / 4 / 3;
+    }
+
+}
+
+/* button */
+
+
+/* CSS */
+.button-4 {
+    appearance: none;
+    background-color: #fe4f02;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    padding: 6px 16px;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.button-4:hover {
+    background-color: #dd4200;
+    color: #fff;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+    background-color: #FAFBFC;
+    border-color: rgba(27, 31, 35, 0.15);
+    color: #959DA5;
+    cursor: default;
+}
+
+.button-4:active {
+    background-color: #EDEFF2;
+    box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+    transition: none 0s;
+}
+
+.button-4:focus {
+    outline: 1px transparent;
+}
+
+.button-4:before {
+    display: none;
+}
+
+.button-4:-webkit-details-marker {
+    display: none;
+}

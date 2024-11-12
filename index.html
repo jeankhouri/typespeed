@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typespeed By EDGE</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/db9d2793c8.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="gridpattern">
+  <div id="main">
+    <div id="intro">
+      <div class="fade-up">
+        <h1 class="title">Typespeed By EDGE</h1>
+      </div>
+      <div class="subtitle fade-up">
+        <p>Sharpen your typing skills by typing randomly generated words as fast and accurately as you can. Choose the word quantity, start typing and press space to go to the next word.</p>
+      </div>
+      <button class="startApp button-4 fade-up" onclick="startApp()">Start</button>
+    </div>
+    <div id="dashboard">
+      <!-- Toolbar titles -->
+      <div class="toolbar fade-up">
+        <div>Word quantity</div>
+
+      </div>
+      <!-- Toolbar -->
+      <div class="toolbar fade-up">
+        <div class="leftbar">
+          <span class="option" value="random">🎲</span>
+          <span class="option selected" value="10">10</span>
+          <span class="option" value="25">25</span>
+          <span class="option" value="50">50</span>
+          <span class="option" value="100">100</span>
+        </div>
+        <!--<div class="timer-display">
+      </div>-->
+      </div>
+      <!-- Text Section -->
+      <div class="input-section fade-up">
+        <div class="top-bar display-text">
+        </div>
+        <div class="bottom-bar">
+          <div class="bottom-bar1">
+            <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" id="input-field" class="">
+          </div>
+          <div class="bottom-bar2">
+            <button class="restart-btn" onclick="restart()"><i class="fa-solid fa-rotate-right"
+                style="color: #ffffff;"></i></button>
+          </div>
+          <div class="bottom-bar3">
+            <button class="new-round" onclick="newRound()">New Round</button>
+          </div>
+        </div>
+      </div>
+      <!-- Stats -->
+      <div id="stats">
+        <div class="stat div1 fade-up">
+          <span>Time:</span>
+          <div class="stat-value time-data">00:00:000</div>
+        </div>
+
+        <div class="stat div2 fade-up">
+          <span>words/min:</span>
+          <div class="stat-value wpm-data">0</div>
+        </div>
+
+        <div class="stat div3 fade-up">
+          <span>secs/word:</span>
+          <div class="stat-value spw-data">0</div>
+        </div>
+
+        <div class="stat div4 fade-up">
+          <span>Typos:</span>
+          <div class="stat-value typpos">0</div>
+        </div>
+
+        <div class="stat div5 fade-up">
+          <span>missing chars:</span>
+          <div class="stat-value missing-data">0</div>
+        </div>
+
+        <div class="stat div6 fade-up">
+          <span>extra chars:</span>
+          <div class="stat-value extra-data">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+
+</html>
