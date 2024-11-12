@@ -1,17 +1,19 @@
-const api = "https://random-word-api.herokuapp.com/";
-
 // DOM Elements
 const textDisplay = document.querySelector(".display-text");
 const textInput = document.querySelector("#input-field");
 const restartBtn = document.querySelector(".restart-btn");
 const timeRef = document.querySelector(".time-data");
 const countOptions = document.querySelector('.leftbar');
+const typedWords = document.getElementById('typed-words')
+const wordSlider = document.querySelector('.word-slider');
+const formWrapper = document.querySelector('.form-wrapper');
 
 // Initialize variables
 let quantityOption = 10;
 let randomWords = [];
 let wordList = [];
-let currentWord = 0;
+let currentWordIndex = 0;
+let letterIndex = 0; //keeps track of the position of the active letter
 
 // Timer variables
 let [milliseconds, seconds, minutes] = [0, 0, 0];
@@ -29,16 +31,6 @@ let totalChars = 0;
 
 const wordStats = {};
 
-class Word {
-    constructor(typpedWord, time, typpos, missingChars, extraChars) {
-        this.typpedWord = typpedWord;
-        this.time = time;
-        this.typpos = typpos;
-        this.missingChars = missingChars;
-        this.extraChars = extraChars;
-    }
-}
-
 // Event listeners
 countOptions.addEventListener("click", event => {
     const optionValue = event.target.getAttribute('value');
@@ -47,17 +39,41 @@ countOptions.addEventListener("click", event => {
     event.target.classList.add('selected');
 });
 
-textInput.addEventListener('keydown', e => {
-    if (currentWord < wordList.length) styleInput(e);
-    if (currentWord === 0 && textInput.value === '') startTimer();
-    if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        verifyWord();
-    }
+formWrapper.addEventListener("click", event => {
+    textInput.focus();
 });
+
+// Staggered animation script	
+const items = document.querySelectorAll('.fade-up');
+const options = {
+    rootMargin: '0px 0px -5%',
+    threshold: 0.0
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }, index * 150);
+        }
+    });
+}, options);
+
+items.forEach(item => observer.observe(item));
+
+function startApp() {
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("dashboard").style.display = 'block';
+    document.getElementById("stats").style.display = 'grid';
+}
 
 function setOptions(option) {
     wordList = [];
+    resetTimer();
+    resetStats();
+    resetUI();
     quantityOption = option === 'random' ? getRandomNumber() : option;
     fetchWords(quantityOption);
 }
@@ -69,9 +85,10 @@ function getRandomNumber() {
 async function fetchWords(numberOfWords) {
     // Display a loading message
     textDisplay.innerHTML = '<p>Loading words...</p>';
+    const url = `https://random-word-api.vercel.app/api?words=${numberOfWords}`;
 
     try {
-        const response = await fetch(api + `word?number=${numberOfWords}`);
+        const response = await fetch(url);
         
         if (!response.ok) {
             throw new Error('Failed to fetch data from the API');
@@ -102,44 +119,96 @@ async function fetchWords(numberOfWords) {
     }
 }
 
+fetchWords(quantityOption);
+
+tippy('.form-wrapper', {
+    content: 'Start Typing!',
+  });
+
+// ----------------------------------------------------- Word display & verification Logic ----------------------------------------------------- //
+
+// Event listeners
+textInput.addEventListener('keydown', e => {
+    if (currentWordIndex < wordList.length) verifyLetters(e.key);
+    if (currentWordIndex === 0 && textInput.textContent === '') startTimer(); //starts timer only when current word index is 0 and field is empty
+    if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        verifyWord();
+        textInput.textContent = '';
+    }
+});
 
 function displayWords(list) {
     textDisplay.innerHTML = list.map((word, index) => `<span index="${index}">${word}</span>`).join('');
+    wordSlider.innerHTML = list.map((word, index) => `<span index="${index}" class="word">${word}</span>`).join('');
     textDisplay.children[0].classList.add('highlight');
+    wordSlider.children[0].classList.add('highlight');
     highlightText('.display-text', 'glow');
 }
 
-function verifyWord() {
-    const input = textInput.value.trim();  // Trim whitespace for better accuracy
-    
-    if (input === '') return;  // Early exit if input is empty
-    
-    const isCorrect = input === wordList[currentWord];
+function verifyLetters(key) {
+    const arrayOfLetters = wordList[currentWordIndex].split('');
+    const allowedKeys = /^[a-z'.,;]$/;
+    let isCorrect;
+    if (key !== 'Backspace' && allowedKeys.test(key)) {
+        let inputText = (textInput.textContent + key).trim(); //Append key and trim
+        let arrayOfTyppedLetters = [...inputText];
 
-    isCorrect ? styleWord('correct') : styleWord('incorrect');
-    
-    if (!isCorrect) {
-        countTypos(input, wordList[currentWord]);
+        if (inputText === arrayOfLetters.slice(0, letterIndex + 1).join('')) {
+            wordSlider.firstChild.textContent = arrayOfLetters.slice(letterIndex + 1).join('');
+
+            if (arrayOfTyppedLetters.length !== arrayOfLetters.length) {
+                letterIndex++;
+                isCorrect = true;
+            }
+
+            textInput.classList.remove('mistake');
+        } else {
+            textInput.classList.add('mistake');
+            isCorrect = false;
+        }
+
+    } else if (key === 'Backspace' && textInput.textContent) {
+        let inputTextAfterDelete = textInput.textContent.slice(0, -1);
+
+        if (!isCorrect) {
+            textInput.classList.add('mistake');
+            letterIndex = inputTextAfterDelete.length
+
+            if (inputTextAfterDelete !== arrayOfLetters.slice(0, letterIndex).join('')) {
+                textInput.classList.add('mistake');
+            } else {
+                wordSlider.firstChild.textContent = arrayOfLetters.slice(letterIndex).join('');
+                isCorrect = true
+                textInput.classList.remove('mistake');
+            }
+        } else {
+            wordSlider.firstChild.textContent = arrayOfLetters.slice(letterIndex).join('');
+        }
     }
-    
+}
+
+function verifyWord() {
+    const input = textInput.textContent.trim();  // Trim whitespace
+
+    if (input === '') return;  // Early exit if input is empty
+    if (input === wordList[currentWordIndex]) {
+        styleWord('correct');
+        typedWords.innerHTML += `<span class="typpedWord">${wordList[currentWordIndex]}</span>`;
+        wordSlider.firstChild.remove();
+
+    } else {
+        typedWords.innerHTML += `<span class="incorrect">${input}</span>`;
+        styleWord('incorrect');
+        countTypos(input, wordList[currentWordIndex]);
+        wordSlider.firstChild.remove();
+    }
+
     incrementWord();
     lap();
 }
 
-
-function styleInput(e) {
-    const allowedKeys = /^[a-z'.,;]$/;
-    const inputLetters = textInput.value + e.key;
-    const currentWordLetters = wordList[currentWord].slice(0, inputLetters.length);
-
-    if (allowedKeys.test(e.key)) {
-        textInput.className = inputLetters === currentWordLetters ? '' : 'mistake';
-    } else if (e.key === 'Backspace') {
-        textInput.className = inputLetters.slice(0, -1) === currentWordLetters ? '' : 'mistake';
-    } else if (e.key === ' ') {
-        textInput.className = '';
-    }
-}
+// ----------------------------------------------------- Stats Logic and Actions ----------------------------------------------------- //
 
 function countTypos(input, output) {
     const arr1 = [...input];
@@ -167,16 +236,13 @@ function highlightText(target, style) {
     setTimeout(() => item.classList.remove(style), 300);
 }
 
-function styleWord(className) {
-    textDisplay.children[currentWord].classList.add(className);
-    textDisplay.children[currentWord].classList.remove('highlight');
-    textInput.value = '';
-}
+
 
 function incrementWord() {
-    if (currentWord < wordList.length - 1) {
-        currentWord++;
-        textDisplay.children[currentWord].classList.add('highlight');
+    if (currentWordIndex < wordList.length - 1) {
+        currentWordIndex++;
+        typedWords.innerHTML += `<span class="space"></span>`;
+        styleWord('highlight')
     } else {
         textInput.disabled = true;
         textInput.style.opacity = "0";
@@ -184,7 +250,15 @@ function incrementWord() {
         calcWPM();
         calcSPW();
     }
+    letterIndex = 0;
+    textInput.value = '';
     displayStats();
+}
+
+function styleWord(className) {
+    textDisplay.children[currentWordIndex].classList.remove('highlight');
+    textDisplay.children[currentWordIndex].classList.add(className);
+    wordSlider.firstChild.classList.add('highlight');
 }
 
 function restart() {
@@ -202,16 +276,31 @@ function newRound() {
     setOptions(quantityOption);
 }
 
+function resetStats() {
+    currentWordIndex = 0;
+    typpos = 0;
+    missingCount = 0;
+    extraCount = 0;
+    wpm = 0;
+    spw = 0;
+    laps = [];
+    letterIndex = 0;
+    Object.keys(wordStats).forEach(key => delete wordStats[key]);
+    displayStats();
+}
+
 function resetUI() {
-    textInput.value = '';
+    textInput.textContent = '';
     textInput.className = '';
-    textInput.disabled = false;
-    textInput.style.opacity = "1";
+    //textInput.style.opacity = "1";
+    typedWords.innerHTML = '';
+    textInput.focus();
 }
 
 function startApp() {
     document.getElementById("intro").style.display = 'none';
     document.getElementById("dashboard").style.display = 'block';
+    document.getElementById("stats").style.display = 'grid';
 }
 
 // Stats functions
@@ -229,18 +318,6 @@ function displayStats() {
     document.querySelector('.typpos').textContent = typpos;
     document.querySelector('.missing-data').textContent = `${missingCount}/${totalChars}`;
     document.querySelector('.extra-data').textContent = `${extraCount}/${totalChars}`;
-}
-
-function resetStats() {
-    currentWord = 0;
-    typpos = 0;
-    missingCount = 0;
-    extraCount = 0;
-    wpm = 0;
-    spw = 0;
-    laps = [];
-    Object.keys(wordStats).forEach(key => delete wordStats[key]);
-    displayStats();
 }
 
 // Timer functions
@@ -277,25 +354,3 @@ function displayTimer() {
     }
     timeRef.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
 }
-
-fetchWords(quantityOption);
-
-// Staggered animation script	
-const items = document.querySelectorAll('.fade-up');
-const options = {
-    rootMargin: '0px 0px -5%',
-    threshold: 0.0
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.style.opacity = 1;
-                entry.target.style.transform = 'translateY(0)';
-            }, index * 150);
-        }
-    });
-}, options);
-
-items.forEach(item => observer.observe(item));
