@@ -4,10 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typespeed By EDGE</title>
+  <title>Type Speed By EDGE</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -16,39 +14,39 @@
   <script src="https://kit.fontawesome.com/db9d2793c8.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="gridpattern">
-  <div id="main">
-    <div id="intro">
-      <div class="fade-up">
-        <h1 class="title">Typespeed By EDGE</h1>
+
+<body class="dots">
+  <main id="main">
+    <div id="intro" class="fade-up">
+      <div class="">
+        <h1 class="title">TYPE SPEED BY EDGE</h1>
       </div>
-      <div class="subtitle fade-up">
-        <p>Sharpen your typing skills by typing randomly generated words as fast and accurately as you can. Choose the
-          word quantity, start typing and press space to go to the next word.</p>
+      <div class="">
+        <p class="subtitle">Sharpen your typing skills by typing random words as fast and accurately as you
+          can. Choose the word quantity, start typing and press space to go to the next word.</p>
       </div>
-      <button class="startApp button-4 fade-up" onclick="startApp()">Start</button>
+      <button class="startApp btn" onclick="startApp()">Start</button>
     </div>
     <div id="dashboard">
       <!-- Toolbar titles -->
       <div class="toolbar fade-up">
-        <div>Word quantity</div>
+        <div id="message-bar"><span>Number of Words</span></div>
 
       </div>
       <!-- Toolbar -->
       <div class="toolbar fade-up">
-        <div class="leftbar">
-          <span class="option" value="random">🎲</span>
+        <div class="option-bar">
+          <span class="option random" value="random">🎲</span>
           <span class="option selected" value="10">10</span>
           <span class="option" value="25">25</span>
           <span class="option" value="50">50</span>
           <span class="option" value="100">100</span>
         </div>
-        <!--<div class="timer-display">
-      </div>-->
       </div>
       <!-- Text Section -->
       <div class="input-section fade-up">
-        <div class="top-row display-text"></div>
+        <div class="top-row display-text">
+        </div>
         <div class="middle-row form-container">
           <div class="form-wrapper row">
             <div class="input column-1">
@@ -61,9 +59,8 @@
           </div>
         </div>
         <div class="bottom-row">
-          <button class="new-round" onclick="newRound()">New Round</button>
-          <button class="restart-btn" onclick="restart()">Restart<i class="fa-solid fa-rotate-right"
-              style="color: #ffffff;"></i></button>
+          <button class="btn new-round" onclick="newRound()">New Round</button>
+          <button class="btn restart-btn" onclick="restart()">Restart</button>
         </div>
       </div>
     </div>
@@ -85,7 +82,7 @@
       </div>
 
       <div class="stat div4 fade-up">
-        <span>Typos:</span>
+        <span>Typpos:</span>
         <div class="stat-value typpos">0</div>
       </div>
 
@@ -99,12 +96,20 @@
         <div class="stat-value extra-data">0</div>
       </div>
     </div>
-  </div>
-  </div>
-  </div>
+    </div>
+    
+  </main>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://unpkg.com/tippy.js@6"></script>
   <script src="app.js"></script>
 </body>
+<footer>
+  <div class="footer-wrapper">
+    <div class="credits">
+      <a href="https://edgesites.ca/"><img class="logo"
+          src="/edge.png"><img><span>Built by EDGE</span></a>
+    </div>
+  </div>
+</footer>
 
 </html>
