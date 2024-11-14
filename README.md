@@ -26,5 +26,5 @@ To run TypeSpeed locally, clone this repository and follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YourUsername/typespeed
+git clone https://github.com/jeankhouri/typespeed
 cd typespeed
