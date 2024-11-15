@@ -33,6 +33,37 @@
   --accent-btn-text: hsl(0, 0%, 100%);
   --blur: blur(1px);
   --dots-bg: radial-gradient(#3d3d3d 0.7px, var(--bg) 0.7px);
+
+  .lightMode {
+    --bg: hsl(240, 0%, 95.5%);
+    --fg: rgba(255, 255, 255);
+    --btn: hsl(225, 0%, 96.5%);
+    --title-color: hsl(0, 0%, 10%);
+    --text: hsl(0, 0%, 48%);
+    --text-high-contrast: hsl(0, 0%, 50.5%);
+    --border: 1px solid hsl(0, 0%, 94%);
+    --border-selected: 1px solid hsl(var(--hue), 100%, 66%);
+    --accent: hsl(var(--hue), 100%, 58%);
+    --highlight: hsl(0, 0%, 0%);
+    --incorrect: hsl(0, 64%, 62%);
+    --option-selected: white;
+    --radial-gradient: radial-gradient(
+      circle at 52% 50%,
+      hsla(230, 8.94%, 13.18%, 0) 63.87%,
+      rgba(30, 31, 36, 0) 64%,
+      hsl(0, 0%, 100%) 85%
+    );
+    --linear-gradient: linear-gradient(
+      0deg,
+      rgb(255, 255, 255) 2%,
+      rgba(255, 255, 255, 0) 25%
+    );
+    --btn-border: hsl(0, 0%, 94%);
+    --btn-border-hover: hsl(var(--hue), 80%, 43%);
+    --accent-btn-text: hsl(0, 0%, 100%);
+    --blur: blur(1px);
+    --dots-bg: radial-gradient(#9d9d9d 0.7px, var(--bg) 0.7px);
+  }
 }
 
 * {
