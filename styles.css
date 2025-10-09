@@ -4,6 +4,7 @@
   --typing-bar-font-size: 20px;
   --border-radius: 10px;
   --hue: 218;
+  --accent-text: #fff;
 
   --bg: hsl(240, 11%, 7%);
   --fg: hsl(230, 9%, 13%);
@@ -16,7 +17,7 @@
   --accent: hsl(var(--hue), 92%, 41%);
   --highlight: hsl(0, 0%, 100%);
   --incorrect: hsl(0, 64%, 62%);
-  --option-selected: #fff;
+  --option-selected: var(--accent-text);
   --radial-gradient: radial-gradient(
     circle at 50% 50%,
     hsla(227, 10%, 17%, 0) 64%,
@@ -30,7 +31,7 @@
   );
   --btn-border: #39393e;
   --btn-border-hover: hsl(var(--hue), 80%, 43%);
-  --accent-btn-text: hsl(0, 0%, 100%);
+  --accent-btn-text: var(--accent-text);
   --blur: blur(1px);
   --dots-bg: radial-gradient(#3d3d3d 0.7px, var(--bg) 0.7px);
 
@@ -46,7 +47,7 @@
     --accent: hsl(var(--hue), 100%, 58%);
     --highlight: hsl(0, 0%, 0%);
     --incorrect: hsl(0, 64%, 62%);
-    --option-selected: white;
+    --option-selected: var(--accent-text);
     --radial-gradient: radial-gradient(
       circle at 52% 50%,
       hsla(230, 8.94%, 13.18%, 0) 63.87%,
@@ -60,7 +61,7 @@
     );
     --btn-border: hsl(0, 0%, 94%);
     --btn-border-hover: hsl(var(--hue), 80%, 43%);
-    --accent-btn-text: hsl(0, 0%, 100%);
+    --accent-btn-text: var(--accent-text);
     --blur: blur(1px);
     --dots-bg: radial-gradient(#9d9d9d 0.7px, var(--bg) 0.7px);
   }
@@ -129,7 +130,7 @@ h1.title {
   font-size: 40px;
   line-height: normal;
   color: var(--title-color);
-  margin: none;
+  margin: 0;
 }
 
 .subtitle {
@@ -203,7 +204,15 @@ h1.title {
   border-radius: var(--border-radius);
   border: var(--border);
   padding: 3px 10px;
-  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  transition: background-color 0.15s ease-out,
+              border-color 0.15s ease-out,
+              color 0.15s ease-out !important;
+}
+
+#dashboard > div.toolbar > div.option-bar > span.selected {
+  transition: background-color 0.15s ease-out,
+              border-color 0.15s ease-out,
+              color 0.15s ease-out !important;
 }
 
 .emojis {
@@ -284,7 +293,8 @@ h1.title {
 }
 
 .startApp {
-  transition: all 200ms ease-in-out;
+  transition: background-color 0.15s ease-out,
+              color 0.15s ease-out !important;
   margin-top: 10px;
   width: 45%;
   border: none;
@@ -468,7 +478,6 @@ h1.title {
   display: flex;
   justify-content: flex-end;
   overflow: hidden;
-  word-wrap: var();
   white-space: nowrap;
 }
 
@@ -526,14 +535,27 @@ h1.title {
 
 .tippy-box[data-theme~="custom"] {
   background-color: var(--accent);
-  color: white;
+  color: var(--accent-text);
   border-radius: 4px;
   padding: 5px 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.15s ease-out,
+              color 0.15s ease-out !important;
 }
 
 .tippy-box[data-theme~="custom"] .tippy-arrow {
   color: var(--accent);
+  transition: color 0.15s ease-out !important;
+}
+
+.tippy-box[data-theme~="custom"] .tippy-arrow::before,
+.tippy-box[data-theme~="custom"] .tippy-arrow::after {
+  transition: all 0.02s ease-out !important;
+}
+
+.tippy-content {
+  transition: color 0.15s ease-out !important;
+  transition-duration: 0.15s !important;
 }
 
 .btn-pulse-mobile {

@@ -1,7 +1,17 @@
+// Timing constants
+const API_TIMEOUT = 3000;
+const TOOLTIP_SHOW_DELAY = 1200;
+const ANIMATION_DURATION = 300;
+const STATS_GLOW_DURATION = 2000;
+const FADE_ANIMATION_STAGGER = 100;
+
+// DOM element references 
 const textDisplay = document.querySelector(".display-text");
 const messageBar = document.getElementById("message-bar");
 const textInput = document.querySelector("#input-field");
 const restartBtn = document.querySelector(".restart-btn");
+const newRoundBtn = document.querySelector(".new-round");
+const startAppBtn = document.querySelector(".startApp");
 const timeRef = document.querySelector(".time-data");
 const countOptions = document.querySelector(".option-bar");
 const typedWords = document.getElementById("typed-words");
@@ -10,6 +20,11 @@ const formWrapper = document.querySelector(".form-wrapper");
 const themeToggle = document.querySelector(".theme-toggle");
 const colorPicker = document.querySelector(".color-picker");
 const statsSection = document.getElementById("stats");
+const wpmData = document.querySelector(".wpm-data");
+const spwData = document.querySelector(".spw-data");
+const typposElement = document.querySelector(".typpos");
+const missingData = document.querySelector(".missing-data");
+const extraData = document.querySelector(".extra-data");
 
 const startTypingTooltip = tippy("#input-field", {
   content: "Press any key to Start!",
@@ -22,7 +37,6 @@ const startTypingTooltip = tippy("#input-field", {
 
 // Initialize variables
 let quantityOption = 10;
-let randomWords = [];
 let wordList = [];
 let currentWordIndex = 0;
 let letterIndex = 0; //keeps track of the position of the active letter
@@ -39,36 +53,68 @@ let spw = 0;
 let typpos = 0;
 let missingCount = 0;
 let extraCount = 0;
-let totalChars = 0;
+// let totalChars = 0; // Future feature: accuracy percentage score
 
-const wordStats = {};
+// const wordStats = {}; // Future feature: per-word statistics tracking
+
+// Event listeners for buttons
+startAppBtn.addEventListener("click", startApp);
+newRoundBtn.addEventListener("click", newRound);
+restartBtn.addEventListener("click", restart);
+
+// Create color picker tooltip
+let colorTooltip = null;
+let colorPickerInitialized = false;
+let updateColorFrame = null; // For requestAnimationFrame
 
 colorPicker.addEventListener("click", (event) => {
-  loadColorPicker();
+  if (!colorPickerInitialized) {
+    colorTooltip = tippy(".color-picker", {
+      content:
+        '<input class="color-range" type="range" min="0" max="100" value="75" title="Drag me, baby.">',
+      allowHTML: true,
+      showOnCreate: false,
+      interactive: true,
+      placement: "left",
+      trigger: "manual",
+      onShown(instance) {
+        // Attach event listener only once when tooltip is first shown
+        const colorRange = instance.popper.querySelector(".color-range");
+        if (colorRange && !colorRange.dataset.listenerAttached) {
+          colorRange.addEventListener("input", function (e) {
+            // requestAnimationFrame for smooth synchronized color updates
+            if (updateColorFrame) {
+              cancelAnimationFrame(updateColorFrame);
+            }
+            updateColorFrame = requestAnimationFrame(() => {
+              const hue = ((this.value / 100) * 360).toFixed(0);
+              const hsl = "hsl(" + hue + ", 100%, 50%)";
+              colorRange.style.color = hsl;
+              document.documentElement.style.setProperty("--hue", hue);
+              
+              // Adjust text color based on brightness (luminance)
+              const textColor = shouldUseDarkText(hue) ? "#000" : "#fff";
+              document.documentElement.style.setProperty("--accent-text", textColor);
+              
+              setCookie("hue", hue, 7);
+            });
+          });
+          colorRange.dataset.listenerAttached = "true";
+        }
+      }
+    });
+    colorPickerInitialized = true;
+  }
+  colorTooltip[0].show();
 });
 
-function loadColorPicker() {
-  const colorTooltip = tippy(".color-picker", {
-    content:
-      '<input class="color-range" type="range" min="0" max="100" value="75" title="Drag me, baby.">',
-    allowHTML: true,
-    showOnCreate: false, // Show the tooltip as soon as it is created
-    interactive: true,
-    placement: "left",
-    trigger: "manual",
-  });
-  colorTooltip[0].show();
-
-  let colorRange = document.querySelector(".color-range");
-
-  colorRange.addEventListener("input", function (e) {
-    let hue = ((this.value / 100) * 360).toFixed(0);
-    let hsl = "hsl(" + hue + ", 100%, 50%)";
-    //var bgHsl = "hsl("+ hue + ", 100%, 95%)"
-    colorRange.style.color = hsl;
-    document.documentElement.style.setProperty("--hue", hue);
-    setCookie("hue", hue, 7);
-  });
+// Check if dark text should be used based on hue
+// Yellow (60°), Cyan (180°), Light Green (90-150°) use dark text
+function shouldUseDarkText(hue) {
+  // Yellow range: 40-80°
+  // Cyan range: 160-200°
+  // Light green: 80-160°
+  return (hue >= 40 && hue <= 200);
 }
 
 // Function to set a cookie
@@ -85,10 +131,10 @@ function getCookie(name) {
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == " ") {
+    while (c.charAt(0) === " ") {
       c = c.substring(1);
     }
-    if (c.indexOf(nameEQ) == 0) {
+    if (c.indexOf(nameEQ) === 0) {
       return c.substring(nameEQ.length, c.length);
     }
   }
@@ -100,6 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeState = getCookie("themeState") || "light";
   const hue = getCookie("hue") || "218";
   document.documentElement.style.setProperty("--hue", hue);
+  
+  // Set initial text color based on saved hue
+  const textColor = shouldUseDarkText(parseInt(hue)) ? "#000" : "#fff";
+  document.documentElement.style.setProperty("--accent-text", textColor);
+  
   const themeIcon = document.querySelector(".theme-icon");
 
   if (themeState === "dark") {
@@ -117,12 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
 themeToggle.addEventListener("click", (event) => {
   const themeIcon = document.querySelector(".theme-icon");
 
-  if (themeToggle.dataset.state == "light") {
+  if (themeToggle.dataset.state === "light") {
     themeIcon.textContent = "🌙";
     document.body.classList.add("lightMode");
     themeToggle.dataset.state = "dark";
     setCookie("themeState", "dark", 7); // Store "dark" theme in cookie for 7 days
-  } else if (themeToggle.dataset.state == "dark") {
+  } else if (themeToggle.dataset.state === "dark") {
     themeIcon.textContent = "☀️";
     document.body.classList.remove("lightMode");
     themeToggle.dataset.state = "light";
@@ -154,12 +205,19 @@ const observer = new IntersectionObserver((entries) => {
       setTimeout(() => {
         entry.target.style.opacity = 1;
         entry.target.style.transform = "translateY(0)";
-      }, index * 100);
+      }, index * FADE_ANIMATION_STAGGER);
+      // Stop observing this element after animation to save resources
+      observer.unobserve(entry.target);
     }
   });
 }, options);
 
 items.forEach((item) => observer.observe(item));
+
+// Cleanup timer on page unload to prevent memory leaks
+window.addEventListener('beforeunload', () => {
+  if (timerInterval) clearInterval(timerInterval);
+});
 
 function setOptions(option) {
   wordList = [];
@@ -177,11 +235,10 @@ function getRandomNumber() {
 async function fetchWords(numberOfWords) {
   const url = `https://random-word-api.vercel.app/api?words=${numberOfWords}`;
   const randomWords = ["the", "be", "of", "and", "a", "to", "in", "he", "have", "it", "that", "for", "they", "I", "with", "as", "not", "on", "she", "at", "by", "this", "we", "you", "do", "but", "from", "or", "which", "one", "would", "all", "will", "there", "say", "who", "make", "when", "can", "more", "if", "no", "man", "out", "other", "so", "what", "time", "up", "go", "about", "than", "into", "could", "state", "only", "new", "year", "some", "take", "come", "these", "know", "see", "use", "get", "like", "then", "first", "any", "work", "now", "may", "such", "give", "over", "think", "most", "even", "find", "day", "also", "after", "way", "many", "must", "look", "before", "great", "back", "through", "long", "where", "much", "should", "well", "people", "down", "own", "just", "because", "good", "each", "those", "feel", "seem", "how", "high", "too", "place", "little", "world", "very", "still", "nation", "hand", "old", "life", "tell", "write", "become", "here", "show", "house", "both", "between", "need", "mean", "call", "develop", "under", "last", "right", "move", "thing", "general", "school", "never", "same", "another", "begin", "while", "number", "part", "turn", "real", "leave", "might", "want", "point", "form", "off", "child", "few", "small", "since", "against", "ask", "late", "home", "interest", "large", "person", "end", "open", "public", "follow", "during", "present", "without", "again", "hold", "govern", "around", "possible", "head", "consider", "word", "program", "problem", "however", "lead", "system", "set", "order", "eye", "plan", "run", "keep", "face", "fact", "group", "play", "stand", "increase", "early", "course", "change", "help", "line"];
-  const timeout = 3000;
   const controller = new AbortController();
   const { signal } = controller;
   const fetchPromise = fetch(url, { signal });
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
 
   // Display a loading message
   messageBar.innerHTML = "<span>Loading words...</span>";
@@ -204,7 +261,7 @@ async function fetchWords(numberOfWords) {
       console.error("Fetch error:", error);
     }
   }
-  // If there's an error, use local data as a fallback
+  // If there's an error fetching from API, use local data as a fallback
   for (let i = wordList.length; i < numberOfWords; i = wordList.length) {
     const randomWord =
       randomWords[Math.floor(Math.random() * randomWords.length)];
@@ -224,10 +281,9 @@ function setRound() {
   displayWords(wordList);
   setTimeout(() => {
     startTypingTooltip[0].show();
-  }, 1200);
+  }, TOOLTIP_SHOW_DELAY);
   scrollToElement(textInput, "center");
-  totalChars = wordList.reduce((acc, word) => acc + word.length, 0);
-  displayStats();
+  // totalChars = wordList.reduce((acc, word) => acc + word.length, 0); // Future feature: accuracy percentage
   textInput.focus();
 }
 
@@ -267,7 +323,7 @@ function displayWords(list) {
   setTimeout(() => {
     textDisplay.classList.remove("highlight");
     textDisplay.firstChild.classList.add("highlight");
-  }, 300);
+  }, ANIMATION_DURATION);
 }
 
 function verifyLetters(key) {
@@ -326,10 +382,12 @@ function verifyWord() {
   if (input === "") return; // Early exit if input is empty
   if (input === wordList[currentWordIndex]) {
     styleWord("correct");
-    typedWords.innerHTML += `<span class="typpedWord">${wordList[currentWordIndex]}</span>`;
+    // Use insertAdjacentHTML instead of innerHTML += for better performance
+    // insertAdjacentHTML only parses new content, while innerHTML += re-parses entire DOM
+    typedWords.insertAdjacentHTML('beforeend', `<span class="typpedWord">${wordList[currentWordIndex]}</span>`);
     wordSlider.firstChild.remove();
   } else {
-    typedWords.innerHTML += `<span class="incorrect">${input}</span>`;
+    typedWords.insertAdjacentHTML('beforeend', `<span class="incorrect">${input}</span>`);
     styleWord("incorrect");
     countTypos(input, wordList[currentWordIndex]);
     wordSlider.firstChild.remove();
@@ -364,7 +422,7 @@ function countTypos(input, output) {
 function highlightText(target, style) {
   const item = document.querySelector(target);
   item.classList.add(style);
-  setTimeout(() => item.classList.remove(style), 300);
+  setTimeout(() => item.classList.remove(style), ANIMATION_DURATION);
 }
 
 function glowStats() {
@@ -373,39 +431,40 @@ function glowStats() {
     stat.classList.add("pulse");
   });
 
-  // Remove the class after 2 seconds
+  // Remove the class after animation completes
   setTimeout(function () {
     stats.forEach(function (stat) {
       stat.classList.remove("pulse");
     });
-  }, 2000); // 2000 milliseconds = 2 seconds
+  }, STATS_GLOW_DURATION);
 }
 
 function incrementWord() {
   if (currentWordIndex < wordList.length - 1) {
     currentWordIndex++;
-    typedWords.innerHTML += `<span class="space"></span>`;
-    styleWord("highlight");
-    let highlightedWord = document.querySelector(".highlight");
+    // Use insertAdjacentHTML for efficient DOM manipulation (avoids re-parsing existing content)
+    typedWords.insertAdjacentHTML('beforeend', `<span class="space"></span>`);
+    const highlightedWord = styleWord("highlight");
     scrollToElement(highlightedWord, "center");
   } else {
     textInput.contentEditable = false;
     textInput.style.opacity = "0";
     pauseTimer();
     calculateStats();
-    displayStats();
     scrollToElement(statsSection, "start");
     glowStats();
   }
   letterIndex = 0;
   textInput.value = "";
-  displayStats();
+  displayStats(); 
 }
 
 function styleWord(className) {
-  textDisplay.children[currentWordIndex].classList.remove("highlight");
-  textDisplay.children[currentWordIndex].classList.add(className);
+  const currentElement = textDisplay.children[currentWordIndex];
+  currentElement.classList.remove("highlight");
+  currentElement.classList.add(className);
   wordSlider.firstChild.classList.add("highlight");
+  return currentElement; // Return the element to avoid re-querying later
 }
 
 function restart() {
@@ -467,15 +526,11 @@ function calculateStats() {
 }
 
 function displayStats() {
-  document.querySelector(".wpm-data").textContent = wpm.toFixed(2);
-  document.querySelector(".spw-data").textContent = spw.toFixed(2);
-  document.querySelector(".typpos").textContent = typpos;
-  document.querySelector(
-    ".missing-data"
-  ).textContent = `${missingCount}/${totalChars}`;
-  document.querySelector(
-    ".extra-data"
-  ).textContent = `${extraCount}/${totalChars}`;
+  wpmData.textContent = wpm.toFixed(2);
+  spwData.textContent = spw.toFixed(2);
+  typposElement.textContent = typpos;
+  missingData.textContent = missingCount;
+  extraData.textContent = extraCount;
 }
 
 // Timer functions
