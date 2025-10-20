@@ -96,7 +96,7 @@ colorPicker.addEventListener("click", (event) => {
               const textColor = shouldUseDarkText(hue) ? "#000" : "#fff";
               document.documentElement.style.setProperty("--accent-text", textColor);
               
-              setCookie("hue", hue, 7);
+              localStorage.setItem("hue", hue);
             });
           });
           colorRange.dataset.listenerAttached = "true";
@@ -117,34 +117,10 @@ function shouldUseDarkText(hue) {
   return (hue >= 40 && hue <= 200);
 }
 
-// Function to set a cookie
-function setCookie(name, value, days) {
-  const d = new Date();
-  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
-  const expires = "expires=" + d.toUTCString();
-  document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-// Function to get a cookie by name
-function getCookie(name) {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(nameEQ) === 0) {
-      return c.substring(nameEQ.length, c.length);
-    }
-  }
-  return null;
-}
-
 // Apply the stored theme on page load
 document.addEventListener("DOMContentLoaded", () => {
-  const themeState = getCookie("themeState") || "light";
-  const hue = getCookie("hue") || "218";
+  const themeState = localStorage.getItem("themeState") || "light";
+  const hue = localStorage.getItem("hue") || "218";
   document.documentElement.style.setProperty("--hue", hue);
   
   // Set initial text color based on saved hue
@@ -172,12 +148,12 @@ themeToggle.addEventListener("click", (event) => {
     themeIcon.textContent = "🌙";
     document.body.classList.add("lightMode");
     themeToggle.dataset.state = "dark";
-    setCookie("themeState", "dark", 7); // Store "dark" theme in cookie for 7 days
+    localStorage.setItem("themeState", "dark");
   } else if (themeToggle.dataset.state === "dark") {
     themeIcon.textContent = "☀️";
     document.body.classList.remove("lightMode");
     themeToggle.dataset.state = "light";
-    setCookie("themeState", "light", 7); // Store "light" theme in cookie for 7 days
+    localStorage.setItem("themeState", "light");
   }
 });
 
